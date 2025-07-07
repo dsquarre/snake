@@ -56,7 +56,7 @@ class Env:
         tmp = direction
         tail_x,tail_y,dir = 0,0,None
         ate_apple = False
-        reward = -0.0001
+        reward = -0.01
         for i in range(len(self.snake)):
             dir = self.snake[i][2]
             if(dir == 'u'):
@@ -78,7 +78,7 @@ class Env:
                 tail_x = self.snake[len(self.snake)-1][0]
                 tail_y = self.snake[len(self.snake)-1][1]
                 dir = self.snake[-1][2]
-                reward = 1
+                reward = 10
             if(i!=0 and self.snake[0][0] == self.snake[i][0] and self.snake[0][1] == self.snake[i][1]):
                 self.gameover = True
                 if show :print("snake ate itself")
@@ -113,6 +113,7 @@ class Env:
             if len(self.snake) == self.height*self.width:
                 self.gameover = True
                 self.apple_x,self.apple_y = None,None
+                reward = 20
             self.apple_x,self.apple_y = self.make_apple()
 
         return reward

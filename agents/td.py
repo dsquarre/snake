@@ -60,7 +60,7 @@ class TD:
     state = state.unsqueeze(0)
     return state
 
-  def best_move(self,env,g,c=10,online=False):
+  def best_move(self,env,g,online=False):
     moves = env.valid_moves()
     #print(moves)
     utility = {}
@@ -70,7 +70,7 @@ class TD:
       new_state = self.get_state(new_env)
       utility[move] = self.value(new_state).detach().item() 
     greedy = max(utility,key=utility.get)
-    epsilon = c * math.sqrt(math.log(g+1))/(g+1)
+    epsilon =  epsilon = max(0.05, 0.2 * math.exp(-0.0005 * g))
     if random.random() < epsilon and not online: 
       return random.choice(moves)
     return greedy
@@ -91,8 +91,8 @@ class TD:
     env = Env(self.height,self.width)
     reward = 0
     lambd = 0.7
-    gamma = 0.8
-    alpha = 0.01
+    gamma = 0.9
+    alpha = 0.001
     apples_eaten = []
     net_rewards = []
     avg_td_errors = []
@@ -102,6 +102,7 @@ class TD:
       net_reward = 0
       total_td_error = 0
       apples = 0
+      movecount = 0
       steps = 0
       env.reset()
       for e in self.E_params:
@@ -114,7 +115,11 @@ class TD:
         '''if g<6:
           print(f"chose {move}")'''
         reward = env.step(move,show=False)
-        if reward == 1:
+        if movecount>100:
+          env.gameover = True
+          reward = -1
+        movecount += 1
+        if reward > 1:
           apples += 1
         steps += 1
         net_reward += reward
@@ -136,6 +141,7 @@ class TD:
             #return "shit"
             e.data = gamma * lambd * e.data + param.grad.data
             e.data = torch.clamp(e.data, -1e2, 1e2)
+            torch.nn.utils.clip_grad_norm_(self.value.parameters(), max_norm=1.0)
             param.data += alpha * td_error.item() * e.data
            
         '''if env.gameover:
