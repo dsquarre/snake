@@ -38,7 +38,6 @@ class TD:
     self.width = W
     self.value = NN(H+2,W+2)
     self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     self.E_params = [torch.zeros_like(p.data,device=self.device) for p in self.value.parameters()]
     self.value.to(self.device)
 
