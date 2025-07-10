@@ -11,8 +11,9 @@ class Env:
         self.height = height
         self.width = width
         self.snake = []
-
-        head = [1,1,None] #starting from topmost left
+        headx = random.randint(1,width)
+        heady = random.randint(1,height)
+        head = [headx,heady,None] #starting from topmost left
         #[x,y,dir]
         self.snake.append(head)
         self.gameover = True
@@ -56,7 +57,7 @@ class Env:
         tmp = direction
         tail_x,tail_y,dir = 0,0,None
         ate_apple = False
-        reward = -0.01
+        reward = 0
         for i in range(len(self.snake)):
             dir = self.snake[i][2]
             if(dir == 'u'):
@@ -114,7 +115,7 @@ class Env:
                 self.gameover = True
                 self.apple_x,self.apple_y = None,None
                 reward = 20
-            self.apple_x,self.apple_y = self.make_apple()
+            else : self.apple_x,self.apple_y = self.make_apple()
 
         return reward
 
@@ -150,7 +151,7 @@ class Env:
         #print one big line
         for i in range(self.width+2):
             print("\033[47m  \033[m",end='')
-        print("\033[40m\033[m") #empty new line
+        print("\033[40m\033[m\n") #empty new line
         #print(f"\nScore: {len(self.snake)}")
 
     def valid_moves(self):

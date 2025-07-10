@@ -6,9 +6,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from env.env import Env
-random.seed(0)
-torch.manual_seed(0)
-
 class NN(nn.Module):
   def __init__(self,H,W):
     super().__init__()
