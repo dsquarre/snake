@@ -24,9 +24,7 @@ class Env:
         self.apple_x,self.apple_y = self.make_apple()
 
     def reset(self):
-
         self.snake = []
-
         head = [1,1,None] #starting from topmost left
         #[x,y,dir]
         self.snake.append(head)
@@ -53,6 +51,7 @@ class Env:
     def step(self,direction,show=True):
 #move head in direction and other parts in their stored direction and store the i-1 direction in i
         #print(f"got {self.snake}")
+        old_distance = (self.snake[0][0]-self.apple_x)**2 + (self.snake[0][1]-self.apple_y)**2
         self.snake[0][2] = direction
         tmp = direction
         tail_x,tail_y,dir = 0,0,None
@@ -84,16 +83,16 @@ class Env:
                 self.gameover = True
                 if show :print("snake ate itself")
                 #break
-                reward = -1
+                reward = -10
 
         if(self.snake[0][0] == self.width+1 or self.snake[0][0] == 0):
             self.gameover=True
             if show : print(f"snake hit wall {self.snake[0][0]}")
-            reward = -1
+            reward = -10
         if(self.snake[0][1] == 0 or self.snake[0][1] == self.height+1):
             self.gameover = True
             if show :print(f"snake hit wall {self.snake[0][1]}")
-            reward = -1
+            reward = -10
         if ate_apple:
             #if actual : print("apple")
             #add tail in direction dir at same position as last tail
@@ -116,7 +115,9 @@ class Env:
                 self.apple_x,self.apple_y = None,None
                 reward = 20
             else : self.apple_x,self.apple_y = self.make_apple()
-
+        new_distance = (self.snake[0][0]-self.apple_x)**2 + (self.snake[0][1]-self.apple_y)**2
+        if reward==0 and new_distance<old_distance:
+            reward = 0.01
         return reward
 
     def render(self):
@@ -196,5 +197,26 @@ class Env:
         if not ok:
             return random.choice(moves)
         return random.choice(ok)
+    
+    def partial_state(self):
+        view = []
+        for move in self.valid_moves():
 
-   
+            temp_x=self.snake[0][0]
+            temp_y = self.snake[0][1]
+
+            if(move == 'u'):
+                temp_y-=1
+
+            elif(move == 'd'):
+                temp_y+=1
+
+            elif(move == 'r'):
+                temp_x+= 1
+
+            elif(move == 'l'):
+                temp_x-= 1
+            view.append([temp_x,temp_y])
+        print(f"head : {self.snake[0]}")
+        print(view)
+        return view
