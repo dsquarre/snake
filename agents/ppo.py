@@ -176,7 +176,7 @@ class PPO:
                 log_prob_sa.append(log_prob)
                 values.append(expected_val)
                 if move not in env.valid_moves():
-                    reward = -10
+                    reward = -1
                     env.gameover = True
                 else:
                     reward = env.step(move,show=False)
@@ -226,29 +226,39 @@ class PPO:
         self.Plot(reward_plot,gametime_plot,apple_plot,entropy_plot,loss_plot)
        
 
-    def play(self):
-        steps = 0
-        env = Env(self.height,self.width)
-        env.render()
-        while not env.gameover:
-            state = self.get_state(env)
-            with torch.no_grad():
-                policy,value = self.controller(state)
-            policy = policy.detach()
-            print(policy)
-            moves = ['l','r','u','d']
-            pi = torch.softmax(policy,dim=1).squeeze()
-            action = torch.argmax(pi).item()
-            move = moves[action]
-            print(f'doing {move}, expected value {value}')
-            if move not in env.valid_moves():
-                print("invalid move")
-                break
-            env.step(move)
-            steps+= 1
+    def play(self,games):
+        for i in range(games):
+            steps = 0
+            env = Env(self.height,self.width)
             env.render()
-            if steps > 2*self.height*self.width:
-                env.gameover = True
+            
+            while not env.gameover:
+                state = self.get_state(env)
+                with torch.no_grad():
+                    policy,value = self.controller(state)
+                policy = policy.detach()
+                moves = ['l','r','u','d']
+                print(moves)
+                print(policy)
+                pi = torch.softmax(policy,dim=1).squeeze()
+                action = torch.argmax(pi).item()
+                move = moves[action]
+                print(f'doing {move}, expected value {value}')
+                if move not in env.valid_moves():
+                    print("invalid move")
+                    
+               
+                time.sleep(3)
+                if move not in env.valid_moves():
+                    print("invalid move")
+                    break
+                env.step(move)
+                steps+= 1    
+                env.clear_screen()
+                env.render()
+                
+                if steps > 2*self.height*self.width:
+                    env.gameover = True
 
     def moving_average(self,data, window_size):
         result = []

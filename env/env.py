@@ -83,16 +83,16 @@ class Env:
                 self.gameover = True
                 if show :print("snake ate itself")
                 #break
-                reward = -10
+                return -1
 
         if(self.snake[0][0] == self.width+1 or self.snake[0][0] == 0):
             self.gameover=True
             if show : print(f"snake hit wall {self.snake[0][0]}")
-            reward = -10
+            return -1
         if(self.snake[0][1] == 0 or self.snake[0][1] == self.height+1):
             self.gameover = True
             if show :print(f"snake hit wall {self.snake[0][1]}")
-            reward = -10
+            return -1
         if ate_apple:
             #if actual : print("apple")
             #add tail in direction dir at same position as last tail
@@ -113,7 +113,7 @@ class Env:
             if len(self.snake) == self.height*self.width:
                 self.gameover = True
                 self.apple_x,self.apple_y = None,None
-                reward = 20
+                return 20
             else : self.apple_x,self.apple_y = self.make_apple()
         new_distance = (self.snake[0][0]-self.apple_x)**2 + (self.snake[0][1]-self.apple_y)**2
         if reward==0 and new_distance<old_distance:
@@ -200,7 +200,8 @@ class Env:
     
     def partial_state(self):
         view = []
-        for move in self.valid_moves():
+        moves = ['l','r','u','d']
+        for move in moves:
 
             temp_x=self.snake[0][0]
             temp_y = self.snake[0][1]
@@ -217,6 +218,5 @@ class Env:
             elif(move == 'l'):
                 temp_x-= 1
             view.append([temp_x,temp_y])
-        print(f"head : {self.snake[0]}")
-        print(view)
+        
         return view

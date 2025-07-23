@@ -167,3 +167,34 @@ class TD:
     plt.legend()
     plt.savefig(f"plots/td{self.height}x{self.width}.png")
     plt.show()
+
+  def play(self,games):
+    env = Env(self.height,self.width)
+    for i in range(games):
+      steps = 0
+      env.reset()    
+      print("new game started") 
+      env.render()
+      while not env.gameover:
+          state = self.get_state(env)
+          moves = env.valid_moves()
+          #print(moves)
+          utility = {}
+          for move in moves:
+            new_env = env.clone()
+            reward = new_env.step(move,show=False)
+            new_state = self.get_state(new_env)
+            utility[move] = self.value(new_state).detach().item() 
+          greedy = max(utility,key=utility.get)      
+          print(f'doing {greedy}, expected value {utility}')
+          env.step(greedy)
+          steps+= 1 
+          if greedy not in env.valid_moves():
+            print("invalid move")
+          time.sleep(2)
+             
+          env.clear_screen()
+          env.render()
+          
+          if steps > 2*self.height*self.width:
+              env.gameover = True
