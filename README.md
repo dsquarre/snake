@@ -4,7 +4,7 @@ Creating a terminal snake game to apply AI algorithms and watch it play.
 ## Agents Implemented
 
 Agents are modular and located in `agents/`:
-- **Deep TD λ-Learning** (`tabular_q.py`)
+- **Deep TD λ-Learning** (`td.py`)
 - **Proximal Policy Optimization**(`ppo.py`)
 
 ---
@@ -20,7 +20,7 @@ snake/<br/>
 ├── plots/ #Plots saved here after play<br/>
 ├── train.py #Main training entry point<br/>
 ├── play.py #Main evaluation entry point<br/>
-└── requirements.txt #Libraries used<br/> 
+├── requirements.txt #Libraries used<br/> 
 └── README.md #This file<br/>
 
 
@@ -41,8 +41,8 @@ python3 -m train --h 10 --w 10 --agent ppo --emo False --pomdp True --epochs 200
 ```
 
 Supported agents: td,ppo
-emo: Will access camera and take you face expressions as a reward using DeepFace
-pomdp: Partial observability - snake can only see one block ahead of it in either direction along with head and apple
+emo: Will access camera and take you face expressions as a reward using DeepFace<br/>
+pomdp: Partial observability - snake can only see one block ahead of it in either direction along with head and apple<br/>
 
 ### Letting agent play
 

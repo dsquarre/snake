@@ -176,7 +176,7 @@ class PPO:
                 log_prob_sa.append(log_prob)
                 values.append(expected_val)
                 if move not in env.valid_moves():
-                    reward = -1
+                    reward = -10
                     env.gameover = True
                 else:
                     reward = env.step(move,show=False)
@@ -193,7 +193,7 @@ class PPO:
                 
                 steps+= 1
                 if steps > self.height*self.width*2:
-                    reward = -1
+                    reward = -10
                     env.gameover = True
                 rewards.append(reward)
                 net_reward += reward
@@ -238,9 +238,10 @@ class PPO:
                     policy,value = self.controller(state)
                 policy = policy.detach()
                 moves = ['l','r','u','d']
-                print(moves)
-                print(policy)
+                print(state)
+                
                 pi = torch.softmax(policy,dim=1).squeeze()
+                print(pi)
                 action = torch.argmax(pi).item()
                 move = moves[action]
                 print(f'doing {move}, expected value {value}')

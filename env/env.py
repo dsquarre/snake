@@ -117,7 +117,7 @@ class Env:
             else : self.apple_x,self.apple_y = self.make_apple()
         new_distance = (self.snake[0][0]-self.apple_x)**2 + (self.snake[0][1]-self.apple_y)**2
         if reward==0 and new_distance<old_distance:
-            reward = 0.01
+            reward = 0.001
         return reward
 
     def render(self):
