@@ -40,7 +40,7 @@ pip install -r requirements.txt
 python3 -m train --h 10 --w 10 --agent ppo --emo False --pomdp True --epochs 200000
 ```
 
-Supported agents: td,ppo
+Supported agents fro emo and pomdp: ppo <br/>
 emo: Will access camera and take you face expressions as a reward using DeepFace. <br/>
 pomdp: Partial observability - snake can only see one block ahead of it in either direction along with head and apple.<br/>
 
