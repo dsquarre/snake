@@ -41,8 +41,8 @@ python3 -m train --h 10 --w 10 --agent ppo --emo False --pomdp True --epochs 200
 ```
 
 Supported agents: td,ppo
-emo: Will access camera and take you face expressions as a reward using DeepFace<br/>
-pomdp: Partial observability - snake can only see one block ahead of it in either direction along with head and apple<br/>
+emo: Will access camera and take you face expressions as a reward using DeepFace. <br/>
+pomdp: Partial observability - snake can only see one block ahead of it in either direction along with head and apple.<br/>
 
 ### Letting agent play
 
